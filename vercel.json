@@ -12,21 +12,16 @@
     ],
     "routes": [
         {
-            "src": "/api/send",
+            "src": "/api/(.*)",
             "dest": "/server/main.py"
         },
         {
-            "src": "/api/receive",
-            "dest": "/server/main.py"
+            "src": "/assets/(.*)",
+            "dest": "/client/dist/assets/$1"
         },
         {
             "src": "/(.*)",
             "dest": "/client/dist/index.html"
         }
-    ],
-    "build": {
-        "env": {
-            "PYTHON_VERSION": "3.12"
-        }
-    }
+    ]
 }
