@@ -38,8 +38,6 @@ def receive_and_send_file():
             return jsonify({'error': 'Code not provided'}), 400
 
         code = request.form['code']
-
-        
         file_path = get_file_path_from_code(code)
 
         if file_path:
@@ -49,6 +47,7 @@ def receive_and_send_file():
             return jsonify({'error': 'Invalid code or file not found'}), 404
 
     except Exception as e:
+        print(f"Exception occurred: {str(e)}")  # Debugging line
         return jsonify({'error': str(e)}), 500
 
 

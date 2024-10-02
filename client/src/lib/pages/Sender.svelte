@@ -1,8 +1,12 @@
 <script>
   import { onMount } from "svelte";
+  import Alert from "../../components/Alert.svelte";
 
   let file;
-  let code = ""; // Generate code on the sender's side
+  let code = "";
+  let alertVisible = false;
+  let alertMessage = "";
+  let alertType = "info";
 
   async function sendFile() {
     const formData = new FormData();
@@ -16,14 +20,21 @@
       });
 
       if (response.ok) {
-        console.log("File sent successfully!"); // Display success message
-        console.log("Generated code:", code); // Log generated code
+        alertMessage = "File sent successfully!"; // Set alert message
+        alertType = "success"; // Set alert type
+        alertVisible = true; // Show alert
+        file = null; // Clear the file input
+        code = generateRandomCode(); // Generate a new random code
       } else {
         const error = await response.json();
-        console.error("Error:", error); // Display error message
+        alertMessage = "Error: " + error.message; // Set error message
+        alertType = "error"; // Set alert type
+        alertVisible = true; // Show alert
       }
     } catch (error) {
-      console.error("Error:", error); // Handle network or other errors
+      alertMessage = "Error: " + error.message; // Set error message
+      alertType = "error"; // Set alert type
+      alertVisible = true; // Show alert
     }
     console.log("Sending file:", file);
     console.log("Using code:", code);
@@ -52,14 +63,11 @@
 <div class="sender-container">
   <h2>Upload a File</h2>
   <input type="file" on:change={handleFileChange} />
-  <!-- <input
-    type="text"
-    bind:value={code}
-    placeholder="Code (generated here)"
-    readonly
-  /> -->
   <p>{code}</p>
   <button on:click={sendFile}>Send</button>
+
+  <!-- Use the Alert component -->
+  <Alert message={alertMessage} type={alertType} visible={alertVisible} />
 </div>
 
 <style>
