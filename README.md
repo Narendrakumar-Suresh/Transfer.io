@@ -19,7 +19,7 @@ A simple desktop application for file transfer using Svelte for the frontend and
 
 ## Technologies Used
 
-- **Frontend:** Svelte, HTML, CSS
+- **Frontend:** Svelte, HTML, CSS, JS
 - **Backend:** Flask, Flask-CORS
 
 ## Installation
