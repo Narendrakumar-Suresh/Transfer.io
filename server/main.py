@@ -58,4 +58,4 @@ def get_file_path_from_code(code):
         return None
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run()
