@@ -9,7 +9,7 @@
     console.log("Entered code:", enteredCode); // Debugging log
 
     try {
-      const response = await fetch(import.meta.env.VITE_RECEIVER_API, {
+      const response = await fetch("https://transfer-io.onrender.com/receive", {
         method: "POST",
         body: formData,
       });

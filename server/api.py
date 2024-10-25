@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify, send_file
 from flask_cors import CORS
 import os
+import logging
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
@@ -19,7 +20,6 @@ def get_file_path_from_code(code):
 
 @app.route('/send', methods=['POST'])
 def send_file_route():
-    """Handle file upload and store the associated code."""
     if 'file' not in request.files or 'code' not in request.form:
         return jsonify({'error': 'File or code not provided'}), 400
 
@@ -29,34 +29,48 @@ def send_file_route():
     if file.filename == '':
         return jsonify({'error': 'No selected file'}), 400
 
-    # Save the file to the received files directory
     file_path = os.path.join(RECEIVED_FOLDER, file.filename)
     file.save(file_path)
 
-    # Store the file path associated with the code
+    # Save code and file path
     file_storage[code] = file_path
-    print(f"Received file with code: {code}")  # Log the received file code
-    print(f"Current file storage: {file_storage}")  # Log current file storage
+    logging.info(f"Received file with code: {code}")  # Logging instead of print
+    logging.info(f"Current file storage: {file_storage}")  # Check storage state
 
     return jsonify({'message': 'File sent successfully!'}), 200
 
 @app.route('/receive', methods=['POST'])
 def receive_and_send_file():
-    """Send the requested file back to the client based on the provided code."""
     try:
         code = request.form.get('code')
-        print(f"Attempting to receive file with code: {code}")  # Log the code being processed
+        logging.info(f"Attempting to receive file with code: {code}")
         file_path = get_file_path_from_code(code)
 
         if file_path:
-            print(f"File found for code {code}: {file_path}")  # Log if the file is found
+            logging.info(f"File found for code {code}: {file_path}")
             filename = os.path.basename(file_path)
             return send_file(file_path, download_name=filename, as_attachment=True)
         else:
-            print(f"No file found for code: {code}")  # Log if no file found
+            logging.warning(f"No file found for code: {code}")
             return jsonify({'error': 'Invalid code or file not found'}), 404
     except Exception as e:
-        print(f"Exception occurred: {str(e)}")  # Log exceptions
+        logging.error(f"Exception occurred: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+    try:
+        code = request.form.get('code')
+        print(f"Attempting to receive file with code: {code}")  
+        file_path = get_file_path_from_code(code)
+
+        if file_path:
+            print(f"File found for code {code}: {file_path}")  
+            filename = os.path.basename(file_path)
+            return send_file(file_path, download_name=filename, as_attachment=True)
+        else:
+            print(f"No file found for code: {code}")  
+            return jsonify({'error': 'Invalid code or file not found'}), 404
+    except Exception as e:
+        print(f"Exception occurred: {str(e)}")  
         return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
