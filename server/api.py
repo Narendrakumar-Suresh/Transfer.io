@@ -58,5 +58,5 @@ def receive_and_send_file():
         print(f"Exception occurred: {str(e)}")  # Log exceptions
         return jsonify({'error': str(e)}), 500
 
-if __name__ == '__main__':
-    app.run(debug=True)
+# if __name__ == '__main__':
+#     app.run(debug=True)
