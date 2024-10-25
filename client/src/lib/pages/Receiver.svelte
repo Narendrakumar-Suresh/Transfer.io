@@ -9,13 +9,10 @@
     console.log("Entered code:", enteredCode); // Debugging log
 
     try {
-      const response = await fetch(
-        "https://transferbackend-2wl4tl4wa-narendrakumars-projects.vercel.app/receive",
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
+      const response = await fetch("http://127.0.0.1:5000/receive", {
+        method: "POST",
+        body: formData,
+      });
 
       if (response.ok) {
         isDownloading = true; // Set downloading state for UI feedback
