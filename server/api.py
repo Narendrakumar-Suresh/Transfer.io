@@ -3,7 +3,8 @@ from flask_cors import CORS
 import os
 
 app = Flask(__name__)
-CORS(app)  # Allow all origins
+CORS(app, resources={r"/*": {"origins": "*"}})
+
 
 # Set the path for the received files folder
 RECEIVED_FOLDER = os.path.join(os.path.expanduser('~'), 'Downloads', 'received_files')
@@ -60,4 +61,4 @@ def receive_and_send_file():
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
-    app.run(host='0.0.0.0', port=port, debug=False)
+    app.run(host='0.0.0.0', port=port, debug=True)
