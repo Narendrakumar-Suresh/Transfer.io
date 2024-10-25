@@ -9,7 +9,7 @@
     console.log("Entered code:", enteredCode); // Debugging log
 
     try {
-      const response = await fetch("http://127.0.0.1:5000/receive", {
+      const response = await fetch(import.meta.env.VITE_RECEIVER_API, {
         method: "POST",
         body: formData,
       });
