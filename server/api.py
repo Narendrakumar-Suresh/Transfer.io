@@ -40,6 +40,7 @@ def send_file_route():
     return jsonify({'message': 'File sent successfully!'}), 200
 
 @app.route('/receive', methods=['POST'])
+@app.route('/receive', methods=['POST'])
 def receive_and_send_file():
     try:
         code = request.form.get('code')
@@ -55,22 +56,6 @@ def receive_and_send_file():
             return jsonify({'error': 'Invalid code or file not found'}), 404
     except Exception as e:
         logging.error(f"Exception occurred: {str(e)}")
-        return jsonify({'error': str(e)}), 500
-
-    try:
-        code = request.form.get('code')
-        print(f"Attempting to receive file with code: {code}")  
-        file_path = get_file_path_from_code(code)
-
-        if file_path:
-            print(f"File found for code {code}: {file_path}")  
-            filename = os.path.basename(file_path)
-            return send_file(file_path, download_name=filename, as_attachment=True)
-        else:
-            print(f"No file found for code: {code}")  
-            return jsonify({'error': 'Invalid code or file not found'}), 404
-    except Exception as e:
-        print(f"Exception occurred: {str(e)}")  
         return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
